@@ -53,12 +53,12 @@ def get_sets(match_files,segment,hop_length,N,threshold):
         actList = []
         instList = []
         for member in pair:
-            instName = member[0].split('/')[-1].split(' ')[0]
+            instName = member[0].split('/')[-1].split(' ')[0].split('-')[-1]
             instList.append(instName)
-            if len(instList) > len(set(instList)):
-                continue
             actList.append(np.squeeze(member[1]))
             files.append(member[0])
+        if len(instList) > len(set(instList)):
+                continue
         act = np.array(actList)
         overlap = np.prod(act, axis=0)
         for i in range((len(overlap)//(segment//hop_length))-1):
@@ -271,7 +271,7 @@ if __name__ == "__main__":
         default=["Mono"],
     )
     parser.add_argument(
-        "--json_path", type=str, default="/data/EECS-Sandler-Lab/BBCSO/strings_t4_2src_test.json", help="Directory path for output json files"
+        "--json_path", type=str, default="/data/EECS-Sandler-Lab/BBCSO/violin_viola_lasaft.json", help="Directory path for output json files"
     )
     parser.add_argument(
         "--segment", type=int, default=220500, help="Length of segments in seconds"
