@@ -92,16 +92,13 @@ class BBCSODataset(Dataset):
             start = int(self.sources[idx][-1])
             stop = start + seg_len
             s, sr = sf.read(filename, start=start, stop=stop, dtype="float32", always_2d=True)
-            #s = s.mean(axis=1) #try keep dims true
+            s = s.mean(axis=1, keepdims=True)
             if key is rand_target:
                 source = torch.from_numpy(s)
             source_arrays.append(s)
-        if sr is not self.sample_rate:
-            sources = torchaudio.transforms.Resample(sr, self.sample_rate)(torch.from_numpy(np.vstack(source_arrays)))
-            source = torchaudio.transforms.Resample(sr, self.sample_rate)(source)
 
         input_condition = np.array(self.source_names.index(rand_target), dtype=np.long)
-
+        sources = torch.from_numpy(np.stack(source_arrays))
 
         mix = torch.stack(list(sources)).sum(0)
         return mix, source, torch.tensor(input_condition, dtype=torch.long)

@@ -6,5 +6,5 @@ defaults:
 name: v2_bbcso
 
 spec2spec:
-    input_channels: 4
+    input_channels: 2
     

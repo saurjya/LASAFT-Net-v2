@@ -1,5 +1,5 @@
 defaults:
-  - trainer: four_2080tis
+  - trainer: single_gpu
   - dataset: bbcso
   - callbacks: default
   - model: v2_bbcso

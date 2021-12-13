@@ -12,8 +12,6 @@ from lasaft.utils.instantiator import HydraInstantiator as HI
 
 
 def train(cfg: DictConfig):
-    if cfg['model']['spec_type'] != 'magnitude':
-        cfg['model']['spec2spec']['input_channels'] = 4
 
     if cfg['trainer']['resume_from_checkpoint'] is None:
         if cfg['seed'] is not None:
