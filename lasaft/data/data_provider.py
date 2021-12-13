@@ -2,8 +2,9 @@ import time
 from warnings import warn
 
 from torch.utils.data import DataLoader
+import torch
 
-from lasaft.data.musdb_wrapper import MusdbTrainSet, MusdbValidSetWithGT, MusdbTestSetWithGT, MusdbTrainSetMultiSource
+from lasaft.data.bbcso_wrapper import BBCSODataset
 
 
 class DataProvider(object):
@@ -54,3 +55,51 @@ class DataProvider(object):
                             pin_memory=self.pin_memory)
 
         return test_set, loader
+
+class BBCSOProvider(object):
+    def __init__(self, json_path,
+                 batch_size, num_workers, pin_memory, n_fft, hop_length, num_frame,
+                 multi_source_training):
+        self.json_path = json_path
+        self.batch_size = batch_size
+        self.num_workers = num_workers
+        self.pin_memory = pin_memory
+        self.num_frame = num_frame
+        self.hop_length = hop_length
+        self.n_fft = n_fft
+        self.multi_source_training = multi_source_training
+        self.segment = hop_length*num_frame
+
+        self.total_set = BBCSODataset(
+            json_path,
+            self.segment,
+            2,
+            44100,
+        )
+        self.train_set, self.val_set = torch.utils.data.random_split(self.total_set, [int(len(self.total_set)*0.9), len(self.total_set) - int(len(self.total_set)*0.9)])
+    
+
+
+    def get_training_dataset_and_loader(self): #need to combine training and val dataloader generation
+        
+        #batch_size = self.batch_size//4 if self.multi_source_training else self.batch_size
+        loader1 = DataLoader(self.train_set, shuffle=True, batch_size=self.batch_size,
+                            num_workers=self.num_workers,
+                            pin_memory=self.pin_memory)
+
+        return self.train_set, loader1
+
+    def get_validation_dataset_and_loader(self):
+        loader2 = DataLoader(self.val_set, shuffle=False, batch_size=self.batch_size,
+                            num_workers=self.num_workers,
+                            pin_memory=self.pin_memory)
+
+        return self.val_set, loader2
+
+    def get_test_dataset_and_loader(self):
+        
+        loader3 = DataLoader(self.total_set, shuffle=False, batch_size=self.batch_size,
+                            num_workers=self.num_workers,
+                            pin_memory=self.pin_memory)
+
+        return self.total_set, loader3

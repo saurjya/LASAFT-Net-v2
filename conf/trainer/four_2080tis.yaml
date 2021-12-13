@@ -4,4 +4,3 @@ defaults:
 gpus: 4
 accelerator: ddp
 sync_batchnorm: True
-precision: 16

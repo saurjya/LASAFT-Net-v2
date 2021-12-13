@@ -1,9 +1,9 @@
 defaults:
-  - trainer: default
-  - dataset: default
+  - trainer: four_2080tis
+  - dataset: bbcso
   - callbacks: default
-  - model: lightsaft_net
-  - logger: wandb
+  - model: v2_bbcso
+  - logger: none
   - exp: null
 
 
