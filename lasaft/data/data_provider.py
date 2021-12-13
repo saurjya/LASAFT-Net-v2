@@ -68,7 +68,7 @@ class BBCSOProvider(object):
         self.hop_length = hop_length
         self.n_fft = n_fft
         self.multi_source_training = multi_source_training
-        self.segment = hop_length*num_frame
+        self.segment = hop_length * (num_frame - 1)
 
         self.total_set = BBCSODataset(
             json_path,
