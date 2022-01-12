@@ -14,7 +14,7 @@ def eval(cfg: DictConfig):
 
     # MODEL
     if cfg['pretrained']['model']['spec_type'] != 'magnitude':
-        cfg['pretrained']['model']['input_channels'] = 4
+        cfg['pretrained']['model']['input_channels'] = 2 #hardcoded to 2 for mono
 
     model = HI.pretrained(cfg)
 

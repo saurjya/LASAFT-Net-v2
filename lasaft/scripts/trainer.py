@@ -76,6 +76,6 @@ def train(cfg: DictConfig):
         trainer=trainer
     )
 
-    trainer.fit(model, training_dataloader)
+    trainer.fit(model, training_dataloader, validation_dataloader)
 
     return None
