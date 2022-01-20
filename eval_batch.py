@@ -15,7 +15,7 @@ def main(cfg: DictConfig):
     batch_evaluator.batch_eval(cfg)
 
 
-@hydra.main(config_path="conf", config_name="eval_batch")
+@hydra.main(config_path="conf", config_name="eval_bbcso")
 def hydra_entry(cfg: DictConfig) -> None:
     main(cfg)
 

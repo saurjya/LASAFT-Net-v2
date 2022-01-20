@@ -61,16 +61,17 @@ class AbstractLaSAFTNet(AbstractSeparator):
         return loss
 
     # Validation Process
+    '''
     def on_validation_epoch_start(self):
         self.num_val_item = len(self.val_dataloader().dataset)
         for target_name in self.target_names:
             self.valid_estimation_dict[target_name] = {mixture_idx: {}
                                                        for mixture_idx
                                                        in range(14)}
-
+    '''
     def validation_step(self, batch, batch_idx):
 
-        mixtures, targets, mixture_ids, window_offsets, input_conditions, target_names = batch
+        mixtures, targets, input_conditions = batch
 
         loss = self.val_loss(self, mixtures, input_conditions, targets)
 

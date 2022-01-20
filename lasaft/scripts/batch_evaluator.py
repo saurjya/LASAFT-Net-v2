@@ -31,14 +31,14 @@ def batch_eval(cfg: DictConfig):
 
         model = model.to('cpu')
 
-        try:
-            ckpt = torch.load(str(checkpoint), map_location='cpu')
-            model.load_state_dict(ckpt['state_dict'])
+        # try: TODO: restore code after debugging
+        ckpt = torch.load(str(checkpoint), map_location='cpu')
+        model.load_state_dict(ckpt['state_dict'])
 
-            print('eval: ', checkpoint)
-            eval_ckpt(cfg, model, checkpoint, train_seed)
-        except FileNotFoundError:
-            print('FileNotFoundError.\n\t {} not exists'.format(checkpoint))  # issue 10: fault tolerance
+        print('eval: ', checkpoint)
+        eval_ckpt(cfg, model, checkpoint, train_seed)
+        # except FileNotFoundError:
+        #     print('FileNotFoundError.\n\t {} not exists'.format(checkpoint))  # issue 10: fault tolerance
 
 
 def eval_ckpt(cfg: DictConfig, model, ckpt, train_seed):
@@ -103,7 +103,7 @@ def eval_ckpt(cfg: DictConfig, model, ckpt, train_seed):
     overlap_ratio = cfg['overlap_ratio']
     batch_size = cfg['batch_size']
 
-    dataset = test_data_loader.dataset.musdb_reference
+    dataset = test_data_loader.dataset
     sources = ['vocals', 'drums', 'bass', 'other']
 
     results = museval.EvalStore(frames_agg='median', tracks_agg='median')

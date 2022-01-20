@@ -58,7 +58,7 @@ class BBCSODataset(Dataset):
                 
                 i += 220500
                 '''
-        self.sources = temp_list
+        self.sources = temp_list #returns list of dictionary [source name: source file audio]
         #with open(os.path.join('/data/EECS-Sandler-Lab/BBCSO/21_test_out.json'), "w") as f:
         #    json.dump(self.sources, f, indent=4)
 

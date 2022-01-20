@@ -53,7 +53,7 @@ def get_sets(match_files,segment,hop_length,N,threshold):
         actList = []
         instList = []
         for member in pair:
-            instName = member[0].split('/')[-1].split(' ')[0].split('-')[-1]
+            instName = member[0].split('/')[-1].split(' ')[0].split('-')[-1].split('.')[0]
             instList.append(instName)
             actList.append(np.squeeze(member[1]))
             files.append(member[0])
@@ -255,15 +255,15 @@ if __name__ == "__main__":
     """
     parser = argparse.ArgumentParser("MedleyDB data preprocessing")
     parser.add_argument(
-        "--data_path", type=str, default="""D:/repos/New_Renders""", help="Directory path of BBCSO tracks"
+        "--data_path", type=str, default="/data/EECS-Sandler-Lab/BBCSO/Renders", help="Directory path of BBCSO tracks"
     )
     
     parser.add_argument(
         "--inst_list",
         nargs="+",
         help="list of instruments",
-        #default=["Violin", "Viola", "Cello", "Bass 1", "Bass 2", "Bass 3", "Bass."],
-        default=["Violin 1", "Viola 1"],
+        default=["Violin", "Viola", "Cello", "Bass."],
+        #default=["Violin 1", "Viola 1"],
     )
     parser.add_argument(
         "--mix_list",         nargs="+",
@@ -271,10 +271,10 @@ if __name__ == "__main__":
         default=["Mono"],
     )
     parser.add_argument(
-        "--json_path", type=str, default="""D:/repos/New_Renders/violin_viola_lasaft.json""", help="Directory path for output json files"
+        "--json_path", type=str, default="/data/EECS-Sandler-Lab/BBCSO/str_lasaft_train.json", help="Directory path for output json files"
     )
     parser.add_argument(
-        "--segment", type=int, default=220500, help="Length of segments in seconds"
+        "--segment", type=int, default=131072, help="Length of segments in samples"
     )
     
 

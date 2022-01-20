@@ -68,7 +68,7 @@ class BBCSOProvider(object):
         self.hop_length = hop_length
         self.n_fft = n_fft
         self.multi_source_training = multi_source_training
-        self.segment = hop_length * (num_frame - 1)
+        self.segment = hop_length*(num_frame - 1)
 
         self.total_set = BBCSODataset(
             json_path,
@@ -83,23 +83,23 @@ class BBCSOProvider(object):
     def get_training_dataset_and_loader(self): #need to combine training and val dataloader generation
         
         #batch_size = self.batch_size//4 if self.multi_source_training else self.batch_size
-        loader1 = DataLoader(self.train_set, shuffle=True, batch_size=self.batch_size,
+        loader = DataLoader(self.train_set, shuffle=True, batch_size=self.batch_size,
                             num_workers=self.num_workers,
                             pin_memory=self.pin_memory)
 
-        return self.train_set, loader1
+        return self.train_set, loader
 
     def get_validation_dataset_and_loader(self):
-        loader2 = DataLoader(self.val_set, shuffle=False, batch_size=self.batch_size,
+        loader = DataLoader(self.val_set, shuffle=False, batch_size=self.batch_size,
                             num_workers=self.num_workers,
                             pin_memory=self.pin_memory)
 
-        return self.val_set, loader2
+        return self.val_set, loader
 
     def get_test_dataset_and_loader(self):
         
-        loader3 = DataLoader(self.total_set, shuffle=False, batch_size=self.batch_size,
+        loader = DataLoader(self.total_set, shuffle=False, batch_size=self.batch_size,
                             num_workers=self.num_workers,
                             pin_memory=self.pin_memory)
 
-        return self.total_set, loader3
+        return self.total_set, loader

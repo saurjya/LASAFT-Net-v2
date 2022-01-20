@@ -1,8 +1,8 @@
 #!/bin/bash
 #$ -l h_vmem=11G
-#$ -pe smp 32
-#$ -l gpu=4
-#$ -l h_rt=1:0:0
+#$ -pe smp 8
+#$ -l gpu=1
+#$ -l h_rt=2:0:0
 #$ -cwd
 #$ -j y
 #$ -m beas
@@ -11,7 +11,7 @@
 #echo $SGE_HGR_gpu
 
 export CUDA_VISIBLE_DEVICES=${SGE_HGR_gpu// /,}
-#echo $CUDA_VISIBLE_DEVICES
+echo $CUDA_VISIBLE_DEVICES
 module load anaconda3/2020.02
 module load cudnn/8.1.1-cuda11.2
 #nvidia-smi
