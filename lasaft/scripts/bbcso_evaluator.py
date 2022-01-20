@@ -104,28 +104,36 @@ def eval_ckpt(cfg: DictConfig, model, ckpt, train_seed):
     batch_size = cfg['batch_size']
 
     dataset = test_data_loader.dataset
-    sources = ['Violin', 'Viola', 'Cello', 'Bass'] # need to change, not same for all tracks
+    source_list = ['Violin', 'Viola', 'Cello', 'Bass'] # need to change, not same for all tracks
 
     results = museval.EvalStore(frames_agg='median', tracks_agg='median') #no need to change, stores the score for all tracks
 
     for idx in range(len(dataset)):
-
         track = dataset[idx]
-        estimation = separate_all(batch_size, model, overlap_ratio, sources, track)
-
+        sources = list(dataset.sources[idx][0].keys())
+        estimation = separate_all(batch_size, model, overlap_ratio, sources, track)    
+        
         # Real SDR
         if len(estimation) == len(sources):
-            track_length = dataset[idx].samples #need to change
+            #track_length = dataset[idx].samples #need to change
+            track_length = 220500 #need to change
+            track_start = track[-1]
             estimated_targets = [estimation[target_name][:track_length] for target_name in sources]
+            reference_targets = [track[target_name][:track_length] for target_name in sources]
             if track_length > estimated_targets[0].shape[0]:
                 raise NotImplementedError
             else:
                 estimated_targets_dict = {target_name: estimation[target_name][:track_length] for target_name in
                                           sources}
-                                          
+                """                        
                 track_score = museval.eval_mus_track(
                     dataset[idx],
                     estimated_targets_dict
+                )
+                """
+                track_score = museval.bss_eval(
+                    reference_targets,
+                    estimated_targets
                 )
                 score_dict = track_score.df.loc[:, ['target', 'metric', 'score']].groupby(
                     ['target', 'metric'])['score'] \
@@ -139,7 +147,7 @@ def eval_ckpt(cfg: DictConfig, model, ckpt, train_seed):
                     print(track_score)
 
                 results.add_track(track_score)
-
+        
     for logger in loggers:
         result_dict = results.df.groupby(
             ['track', 'target', 'metric']
